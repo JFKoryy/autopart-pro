@@ -1,6 +1,7 @@
 const express = require('express'); 
 const cors = require('cors'); 
 require('dotenv').config(); 
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const db = require('./config/db');
@@ -10,7 +11,7 @@ app.use(express.json());
 
 app.get('/api/health', (req, res) => {
     res.status(200).json({
-        status: 'WON',
+        status: 'ON',
         message: 'Servidor de AutoPart Pro funcionando correctamente',
         timestamp: new Date()
     });
@@ -22,5 +23,7 @@ app.listen(PORT, () => {
     console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
     console.log(`Prueba el servidor en: http://localhost:${PORT}/api/health`);
 });
+
+app.use('/api/auth', authRoutes);
 
 module.exports = app;
