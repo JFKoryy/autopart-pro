@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const UserModel = require('../models/userModel');
-
+const db = require('../config/db');
 
 const authController = {
     
@@ -70,6 +70,34 @@ const authController = {
 
         } catch (error) {
             console.error('Error en el inicio de sesión:', error);
+            return res.status(500).json({ message: 'Error interno del servidor.' });
+        }
+    },
+    //Esta funcion es para obtener el perfil del usuario logueado
+
+getProfile: async (req, res) => {
+        try {
+            // El ID del usuario ya fue descifrado e inyectado por el middleware en req.user
+            const userId = req.user.id;
+
+            // Buscamos al usuario en la base de datos por su ID
+            // Traemos solo los datos limpios, NUNCA la contraseña
+            const [rows] = await db.execute(
+                'SELECT id, name, email, created_at FROM users WHERE id = ?', 
+                [userId]
+            );
+
+            if (rows.length === 0) {
+                return res.status(404).json({ message: 'Usuario no encontrado.' });
+            }
+
+            // Devolvemos los datos del usuario autenticado
+            return res.status(200).json({
+                user: rows[0]
+            });
+
+        } catch (error) {
+            console.error('Error al obtener el perfil:', error);
             return res.status(500).json({ message: 'Error interno del servidor.' });
         }
     }
