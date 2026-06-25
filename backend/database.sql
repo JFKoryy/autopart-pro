@@ -18,5 +18,15 @@ CREATE TABLE IF NOT EXISTS users (
     role ENUM('admin', 'employee') DEFAULT 'employee',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
+CREATE TABLE IF NOT EXISTS products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sku VARCHAR(50) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    brand VARCHAR(100) NOT NULL,
+    compatible_cars TEXT, -- Aquí podemos guardar marcas/modelos en formato de texto libre
+    price DECIMAL(10, 2) NOT NULL DEFAULT 0.00,
+    stock INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 INSERT INTO test_connection (status_message) VALUES ('¡Conexión de la Fase 1 exitosa desde la DB!');

@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors'); 
 require('dotenv').config(); 
 const authRoutes = require('./routes/authRoutes');
+const productRoutes = require('./routes/productRoutes');
 
 const app = express();
 const db = require('./config/db');
@@ -25,5 +26,7 @@ app.listen(PORT, () => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
+
 
 module.exports = app;

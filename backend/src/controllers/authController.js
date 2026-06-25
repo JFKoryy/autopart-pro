@@ -61,7 +61,7 @@ const authController = {
                 return res.status(400).json({ message: 'Credenciales inválidas.' });
             }
 
-            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
             return res.status(200).json({ 
                 message: '¡Inicio de sesión exitoso!', 
