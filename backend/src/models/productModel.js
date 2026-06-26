@@ -73,7 +73,7 @@ update: async (id, productData) => {
 
     // 6. Obtener productos con stock bajo
     getLowStock: async () => {
-    const [rows] = await db.execute('SELECT * FROM products WHERE stock <= min_stock');
+    const [rows] = await db.execute('SELECT name, stock FROM products WHERE stock <= min_stock');
     return rows;
 }
 };
