@@ -29,4 +29,6 @@ CREATE TABLE IF NOT EXISTS products (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+ALTER TABLE products 
+ADD COLUMN min_stock INT NOT NULL DEFAULT 5;
 INSERT INTO test_connection (status_message) VALUES ('¡Conexión de la Fase 1 exitosa desde la DB!');

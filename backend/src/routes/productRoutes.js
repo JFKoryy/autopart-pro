@@ -4,10 +4,13 @@ const ProductController = require('../controllers/productController');
 const protect = require('../middleware/authMiddleware');
 const { validateProductData } = require('../middleware/productMiddleware');
 const { authorize } = require('../middleware/roleMiddleware'); 
-// El nuevo middleware de roles
-    
+
 // 1. Ver inventario: Cualquier usuario logueado (admin o employee) puede verlo
 router.get('/', protect, ProductController.getAllProducts);
+
+router.get('/low-stock', protect, ProductController.getLowStockProducts);
+
+router.get('/:id', protect, ProductController.getProductById);
 
 // 2. Crear producto: SOLO ADMINS
 router.post('/', protect, authorize('admin'), validateProductData, ProductController.createProduct);

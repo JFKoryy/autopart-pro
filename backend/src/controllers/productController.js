@@ -81,26 +81,6 @@ const ProductController = {
             res.status(500).json({ success: false, message: 'Error al actualizar el producto.' });
         }
     },
-    // 3. Manejar la actualización de un producto
-    updateProduct: async (req, res) => {
-        try {
-            const { id } = req.params;
-            const wasUpdated = await ProductModel.update(id, req.body);
-
-            if (!wasUpdated) {
-                return res.status(404).json({ success: false, message: 'Producto no encontrado.' });
-            }
-
-            res.status(200).json({ success: true, message: 'Autoparte actualizada con éxito.' });
-        } catch (error) {
-            console.error('Error en updateProduct:', error);
-            if (error.code === 'ER_DUP_ENTRY') {
-                return res.status(400).json({ success: false, message: 'El SKU ingresado ya pertenece a otro producto.' });
-            }
-            res.status(500).json({ success: false, message: 'Error al actualizar el producto.' });
-        }
-    },
-
     // 4. Manejar la eliminación de un producto
     deleteProduct: async (req, res) => {
         try {
@@ -115,6 +95,31 @@ const ProductController = {
         } catch (error) {
             console.error('Error en deleteProduct:', error);
             res.status(500).json({ success: false, message: 'Error al eliminar el producto.' });
+        }
+    },
+
+    getProductById: async (req, res) => { 
+        try {
+            const { id } = req.params; //Aquí obtenemos el id para la URL
+            const product = await ProductModel.getById(id);
+
+            if (!product) {
+                return res.status(404).json({ success: false, message: 'Producto no encontrado.' });
+            }
+
+            res.status(200).json({ success: true, data: product });
+        } catch (error) {
+            console.error('Error en getProductById:', error);
+            res.status(500).json({ success: false, message: 'Error al obtener el producto.' });
+        }
+    },
+    getLowStockProducts: async (req, res) => {
+        try {
+            const lowStockProducts = await ProductModel.getLowStock();
+            res.status(200).json({ success: true, data: lowStockProducts });
+        } catch (error) {
+            console.error('Error en getLowStockProducts:', error);
+            res.status(500).json({ success: false, message: 'Error al obtener los productos con stock bajo.' });
         }
     }
 };

@@ -1,12 +1,13 @@
 const validateProductData = (req, res, next) => {
     const { sku, name, brand, price, stock } = req.body;
 
-    // 1. Validar campos obligatorios
-    if (!sku || !name || !brand) {
-        return res.status(400).json({
-            success: false,
-            message: 'Faltan campos obligatorios: sku, name y brand son requeridos.'
-        });
+    if (req.method === 'POST') {
+        if (!sku || !name || !brand) {
+            return res.status(400).json({
+                success: false,
+                message: 'Faltan campos obligatorios: sku, name y brand son requeridos.'
+            });
+        }
     }
 
     // 2. Validar que el precio sea un número válido y positivo
@@ -26,7 +27,9 @@ const validateProductData = (req, res, next) => {
     }
 
     // Si todo está perfecto, formateamos el SKU a mayúsculas para estandarizar
+    if (sku !== undefined) {
     req.body.sku = sku.toUpperCase().trim();
+}
 
     // ¡Todo orden, que pase al controlador!
     next();
