@@ -1,4 +1,5 @@
 const ProductModel = require('../models/productModel');
+const stockEmitter = require('../events/stockEmitter');
 
 const ProductController = {
     // 1. Manejar la petición de listar todos los productos
@@ -72,6 +73,10 @@ const ProductController = {
                 return res.status(404).json({ success: false, message: 'Producto no encontrado.' });
             }
 
+        const updatedProduct = await ProductModel.getById(id);
+        if (updatedProduct.stock <= updatedProduct.min_stock) {
+            stockEmitter.emit('low-stock', updatedProduct);
+        }
             res.status(200).json({ success: true, message: 'Autoparte actualizada con éxito.' });
         } catch (error) {
             console.error('Error en updateProduct:', error);
@@ -108,6 +113,7 @@ const ProductController = {
             }
 
             res.status(200).json({ success: true, data: product });
+
         } catch (error) {
             console.error('Error en getProductById:', error);
             res.status(500).json({ success: false, message: 'Error al obtener el producto.' });

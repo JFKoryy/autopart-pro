@@ -3,12 +3,16 @@ const cors = require('cors');
 require('dotenv').config(); 
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
-
+const stockEmitter = require('./events/stockEmitter');
 const app = express();
 const db = require('./config/db');
 
 app.use(cors()); 
 app.use(express.json()); 
+
+stockEmitter.on('low-stock', (product) => {
+    console.log(`⚠️  Alerta de stock bajo: El producto "${product.name}" (SKU: ${product.sku}) tiene un stock de ${product.stock}.`);
+});
 
 app.get('/api/health', (req, res) => {
     res.status(200).json({
