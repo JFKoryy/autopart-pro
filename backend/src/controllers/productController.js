@@ -22,7 +22,7 @@ const ProductController = {
     // 2. Manejar la petición de crear una nueva autoparte
     createProduct: async (req, res) => {
         try {
-            const { sku, name, brand, compatible_cars, price, stock } = req.body;
+            const { sku, name, brand, compatible_cars, price, stock, category, description } = req.body;
 
             // Validación express: que al menos tenga SKU, Nombre y Marca
             if (!sku || !name || !brand) {
@@ -38,7 +38,10 @@ const ProductController = {
                 brand,
                 compatible_cars,
                 price,
-                stock
+                stock,
+                image_url: req.body.image_url || null,
+                description: req.body.description || null,
+                category: req.body.category || null
             });
 
             res.status(201).json({

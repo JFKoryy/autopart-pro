@@ -8,13 +8,13 @@ const empty = {
   sku: "",
   name: "",
   brand: "",
-  model: "",
-  year: "",
   price: "",
   stock: "",
-  minStock: "",
+  min_stock: "",
   category: "",
   description: "",
+  image_url: "",
+  compatible_cars: "",
 }
 
 export default function ProductForm() {
@@ -71,12 +71,20 @@ export default function ProductForm() {
           </div>
 
           <Select label="Marca" name="brand" value={form.brand} onChange={handleChange} options={brands} required />
-          <Field label="Modelo" name="model" value={form.model} onChange={handleChange} placeholder="Corolla" required />
-          <Select label="Año compatible" name="year" value={form.year} onChange={handleChange} options={years} required />
 
+          <div className="sm:col-span-2">
+            <Field
+              label="Autos compatibles"
+              name="compatible_cars"
+              value={form.compatible_cars}
+              onChange={handleChange}
+              placeholder="Toyota Corolla, Mazda 3, Chevrolet Spark"
+              required
+            />
+          </div>
           <Field label="Precio ($)" name="price" type="number" step="0.01" value={form.price} onChange={handleChange} placeholder="45.99" required />
           <Field label="Stock" name="stock" type="number" value={form.stock} onChange={handleChange} placeholder="20" required />
-          <Field label="Stock mínimo" name="minStock" type="number" value={form.minStock} onChange={handleChange} placeholder="10" required />
+          <Field label="Stock mínimo" name="min_stock" type="number" value={form.min_stock} onChange={handleChange} placeholder="10" required />
 
           <div className="sm:col-span-2">
             <label className="mb-1 block text-sm font-medium text-ink-700">Descripción</label>
@@ -88,6 +96,16 @@ export default function ProductForm() {
               placeholder="Detalles del producto..."
               className="w-full rounded-md border border-neutral-300 px-3 py-2 text-ink-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200"
             />
+          </div>
+
+                <div className="sm:col-span-2">
+          <Field
+            label="URL de la imagen"
+            name="image_url"
+            value={form.image_url}
+            onChange={handleChange}
+            placeholder="https://..."
+          />
           </div>
         </div>
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { getProducts, deleteProduct, updateStock } from "../services/api"
+import { getProducts, deleteProduct, updateProduct } from "../services/api"
 import { useAuth } from "../context/AuthContext"
 import Modal from "../components/Modal"
 import { Pencil, Trash2, PlusCircle, AlertTriangle, Save, Search } from "lucide-react"
@@ -14,10 +14,13 @@ export default function Inventory() {
   const [stockEdit, setStockEdit] = useState(null)
   const [stockValue, setStockValue] = useState(0)
 
-  useEffect(() => {
-    // TODO: reemplazar por llamada real a la API
-    getProducts().then(setProducts)
-  }, [])
+useEffect(() => {
+    getProducts()
+        .then(setProducts)
+        .catch((error) => {
+            console.error("Error al obtener productos:", error)
+        })
+}, [])
 
   const filtered = products.filter(
     (p) =>
@@ -25,25 +28,32 @@ export default function Inventory() {
       p.sku.toLowerCase().includes(query.toLowerCase()),
   )
 
-  async function confirmDelete() {
-    // TODO: reemplazar por llamada real a la API
-    await deleteProduct(toDelete.id)
-    setProducts((prev) => prev.filter((p) => p.id !== toDelete.id))
-    setToDelete(null)
-  }
+async function confirmDelete() {
+    try {
+        await deleteProduct(toDelete.id)
+        setProducts((prev) => prev.filter((p) => p.id !== toDelete.id))
+        setToDelete(null)
+    } catch (error) {
+        console.error("Error al eliminar producto:", error)
+        alert(error.message)
+    }
+}
 
   function openStock(product) {
     setStockEdit(product)
     setStockValue(product.stock)
   }
 
-  async function saveStock() {
-    // TODO: reemplazar por llamada real a la API
-    await updateStock(stockEdit.id, Number(stockValue))
-    setProducts((prev) => prev.map((p) => (p.id === stockEdit.id ? { ...p, stock: Number(stockValue) } : p)))
-    setStockEdit(null)
-  }
-
+async function saveStock() {
+    try {
+        await updateProduct(stockEdit.id, { stock: Number(stockValue) })
+        setProducts((prev) => prev.map((p) => (p.id === stockEdit.id ? { ...p, stock: Number(stockValue) } : p)))
+        setStockEdit(null)
+    } catch (error) {
+        console.error("Error al actualizar stock:", error)
+        alert(error.message)
+    }
+}
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">

@@ -6,7 +6,7 @@ const { validateProductData } = require('../middleware/productMiddleware');
 const { authorize } = require('../middleware/roleMiddleware'); 
 
 // 1. Ver inventario: Cualquier usuario logueado (admin o employee) puede verlo
-router.get('/', protect, ProductController.getAllProducts);
+router.get('/', ProductController.getAllProducts);
 
 router.get('/low-stock', protect, ProductController.getLowStockProducts);
 

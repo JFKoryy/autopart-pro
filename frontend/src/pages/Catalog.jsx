@@ -21,6 +21,10 @@ export default function Catalog() {
       setProducts(data)
       setLoading(false)
     })
+    .catch((error) => {
+      console.error("Error al obtener productos:", error)
+      setLoading(false)
+    })
   }, [])
 
   const models = useMemo(() => {

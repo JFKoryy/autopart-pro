@@ -4,23 +4,25 @@ const ProductModel = {
     // 1. Obtener todos los productos del inventario
     getAll: async () => {
         const [rows] = await db.execute('SELECT * FROM products ORDER BY created_at DESC');
-        return rows;
+        return rows.map(row => ({ ...row, price: parseFloat(row.price) }));
     },
 
     // 2. Buscar un producto por su ID
     getById: async (id) => {
         const [rows] = await db.execute('SELECT * FROM products WHERE id = ?', [id]);
-        return rows[0]; // Retornamos solo el primer resultado si existe
+        const product = rows[0];
+        if (!product) return null;
+        return { ...product, price: parseFloat(product.price) };
     },
 
     // 3. Crear una nueva autoparte
     create: async (productData) => {
-        const { sku, name, brand, compatible_cars, price, stock } = productData;
+        const { sku, name, brand, compatible_cars, price, stock, image_url, description, category } = productData;
         const query = `
-            INSERT INTO products (sku, name, brand, compatible_cars, price, stock) 
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO products (sku, name, brand, compatible_cars, price, stock, image_url, description, category) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `;
-        const [result] = await db.execute(query, [sku, name, brand, compatible_cars, price, stock]);
+        const [result] = await db.execute(query, [sku, name, brand, compatible_cars, price, stock, image_url, description, category]);
         return result.insertId; // Nos devuelve el ID del nuevo producto creado
     },
     // 4. Actualizar una autoparte existente
@@ -52,6 +54,18 @@ update: async (id, productData) => {
     if (productData.stock !== undefined) {
         fields.push('stock = ?');
         values.push(productData.stock);
+    }
+    if (productData.image_url !== undefined) {
+        fields.push('image_url = ?');
+        values.push(productData.image_url);
+    }
+    if (productData.description !== undefined) {
+        fields.push('description = ?');
+        values.push(productData.description);
+    }
+    if (productData.category !== undefined) {
+        fields.push('category = ?');
+        values.push(productData.category);
     }
 
     if (fields.length === 0) {

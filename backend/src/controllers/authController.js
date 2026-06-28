@@ -29,11 +29,24 @@ const authController = {
             const hashedPassword = await bcrypt.hash(password, salt);
 
             
-            await UserModel.create(name, email, hashedPassword);
+            const result = await UserModel.create(name, email, hashedPassword);
+            const userId = result.insertId;
 
+            const token = jwt.sign(
+                { id: userId, role: 'client' },
+                process.env.JWT_SECRET,
+                { expiresIn: '1h' }
+            );
             
             return res.status(201).json({ 
-                message: '¡Usuario registrado con éxito! Ya puedes iniciar sesión.' 
+                message: '¡Usuario registrado con éxito! Ya puedes iniciar sesión.', 
+                token, 
+                user:   {
+                    id: userId,
+                    name: name,
+                    email: email,
+                    role: 'user' // Asignamos un rol por defecto
+                }
             });
 
         } catch (error) {
