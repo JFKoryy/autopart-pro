@@ -11,10 +11,11 @@ const roleBadge = {
 export default function Users() {
   const [users, setUsers] = useState([])
 
-  useEffect(() => {
-    // TODO: reemplazar por llamada real a la API
-    getUsers().then(setUsers)
-  }, [])
+useEffect(() => {
+    getUsers()
+        .then(setUsers)
+        .catch((error) => console.error("Error al obtener usuarios:", error))
+}, [])
 
   return (
     <div>
@@ -36,7 +37,6 @@ export default function Users() {
                 <th className="px-4 py-3 font-medium">Nombre</th>
                 <th className="px-4 py-3 font-medium">Email</th>
                 <th className="px-4 py-3 font-medium">Rol</th>
-                <th className="px-4 py-3 font-medium">Estado</th>
               </tr>
             </thead>
             <tbody>
@@ -50,15 +50,6 @@ export default function Users() {
                       <span className={`inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-semibold ${badge.color}`}>
                         <badge.icon size={13} />
                         {badge.label}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
-                          u.status === "activo" ? "bg-green-100 text-green-700" : "bg-neutral-100 text-neutral-500"
-                        }`}
-                      >
-                        {u.status}
                       </span>
                     </td>
                   </tr>

@@ -1,6 +1,3 @@
-// Funciones de servicio SIMULADAS.
-// Cada una imita una respuesta del backend con una promesa resuelta tras un pequeño delay.
-// TODO: reemplazar cada función por la llamada real a la API.
 
 import { mockProducts, mockSales, mockUsers } from "./mockData"
 
@@ -151,9 +148,48 @@ export async function getSales() {
 // ---------- USUARIOS ----------
 
 export async function getUsers() {
-  // TODO: reemplazar por llamada real a la API (GET /users)
-  await delay()
-  return [...mockUsers]
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+    headers: getAuthHeader()
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Error al obtener usuarios')
+  }
+
+  return data.data
+}
+
+export async function updateUserRole(id, role) {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${id}/role`, {
+    method: 'PUT',
+    headers: getAuthHeader(),
+    body: JSON.stringify({ role })
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Error al actualizar rol')
+  }
+
+  return data
+}
+
+export async function deleteUser(id) {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${id}`, {
+    method: 'DELETE',
+    headers: getAuthHeader()
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Error al eliminar usuario')
+  }
+
+  return data
 }
 
 // ---------- CHECKOUT ----------

@@ -9,10 +9,13 @@ const stockEmitter = require('./events/stockEmitter');
 const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const saleRoutes = require('./routes/saleRoutes');
+const userRoutes = require('./routes/userRoutes');
 
-// Middlewares globales
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+    origin: [
+        'http://localhost:5173',
+        'http://192.168.1.165:5173'
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -36,7 +39,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/sales', saleRoutes);
-
+app.use('/api/users', userRoutes);
 // Servidor
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
