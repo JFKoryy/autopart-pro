@@ -11,19 +11,24 @@ export default function Checkout() {
   const [done, setDone] = useState(false)
   const [orderId, setOrderId] = useState("")
 
-  const shipping = items.length > 0 ? 9.99 : 0
+  const shipping = items.length > 0 ? 10000 : 0
   const grandTotal = total + shipping
 
-  async function handleSubmit(e) {
+ async function handleSubmit(e) {
     e.preventDefault()
     setLoading(true)
-    // TODO: reemplazar por llamada real a la API / pasarela de pago
-    const res = await checkout(items, {})
-    setOrderId(res.orderId)
-    clearCart()
-    setLoading(false)
-    setDone(true)
-  }
+    try {
+        const res = await checkout(items)
+        setOrderId(res.saleId)
+        clearCart()
+        setDone(true)
+    } catch (error) {
+        console.error('Error en checkout:', error)
+        alert(error.message)
+    } finally {
+        setLoading(false)
+    }
+}
 
   if (done)
     return (

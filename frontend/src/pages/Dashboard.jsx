@@ -10,12 +10,19 @@ export default function Dashboard() {
   const [lowStock, setLowStock] = useState([])
   const [sales, setSales] = useState([])
 
-  useEffect(() => {
-    // TODO: reemplazar por llamadas reales a la API
-    getProducts().then(setProducts)
-    getLowStockProducts().then(setLowStock)
-    getSales().then(setSales)
-  }, [])
+useEffect(() => {
+    getProducts()
+        .then(setProducts)
+        .catch((error) => console.error("Error al obtener productos:", error))
+
+    getLowStockProducts()
+        .then(setLowStock)
+        .catch((error) => console.error("Error al obtener stock bajo:", error))
+
+    getSales()
+        .then(setSales)
+        .catch((error) => console.error("Error al obtener ventas:", error))
+}, [])
 
   const totalRevenue = sales.reduce((sum, s) => sum + s.total, 0)
 

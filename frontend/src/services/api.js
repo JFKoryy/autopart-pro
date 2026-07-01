@@ -136,11 +136,18 @@ export async function register(name, email, password) {
 // ---------- VENTAS ----------
 
 export async function getSales() {
-  // TODO: reemplazar por llamada real a la API (GET /sales)
-  await delay()
-  return [...mockSales]
-}
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/sales`, {
+    headers: getAuthHeader()
+  })
 
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Error al obtener ventas')
+  }
+
+  return data.data
+}
 // ---------- USUARIOS ----------
 
 export async function getUsers() {
@@ -151,8 +158,24 @@ export async function getUsers() {
 
 // ---------- CHECKOUT ----------
 
-export async function checkout(cart, paymentInfo) {
-  // TODO: reemplazar por llamada real a la API / pasarela de pago (POST /checkout)
-  await delay(800)
-  return { success: true, orderId: "ORD-" + Date.now() }
+export async function checkout(cart) {
+  const items = cart.map(item => ({
+    product_id: item.id,
+    quantity: item.qty,        
+    unit_price: item.price
+  }))
+
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/sales`, {
+    method: 'POST',
+    headers: getAuthHeader(),
+    body: JSON.stringify({ items })
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Error al procesar la compra')
+  }
+
+  return data
 }
