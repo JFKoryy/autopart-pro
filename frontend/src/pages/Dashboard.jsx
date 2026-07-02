@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { getProducts, getLowStockProducts, getSales } from "../services/api"
 import { useAuth } from "../context/AuthContext"
+import { formatPrice } from "../utils/formatters"
 import { Package, AlertTriangle, DollarSign, Receipt, ArrowRight } from "lucide-react"
 
 export default function Dashboard() {
@@ -38,7 +39,7 @@ useEffect(() => {
     { label: "Ventas", value: sales.length, icon: Receipt, color: "bg-amber-50 text-amber-600" },
     {
       label: "Ingresos",
-      value: `$${totalRevenue.toFixed(2)}`,
+      value: formatPrice(totalRevenue),
       icon: DollarSign,
       color: "bg-green-50 text-green-600",
     },
@@ -94,7 +95,7 @@ useEffect(() => {
                     <p className="text-xs text-neutral-400">{p.sku}</p>
                   </div>
                   <span className="ml-2 shrink-0 rounded-md bg-red-100 px-2 py-1 text-xs font-bold text-red-700">
-                    {p.stock} / mín {p.minStock}
+                    {p.stock} / mín {p.min_stock}
                   </span>
                 </div>
               ))}
@@ -120,9 +121,13 @@ useEffect(() => {
               {sales.slice(0, 5).map((s) => (
                 <tr key={s.id} className="border-b border-neutral-100 last:border-0">
                   <td className="py-2 pr-4 font-mono text-neutral-500">{s.id}</td>
-                  <td className="py-2 pr-4 text-neutral-600">{s.date}</td>
-                  <td className="py-2 pr-4 text-ink-700">{s.product}</td>
-                  <td className="py-2 pr-4 text-right font-semibold text-ink-800">${s.total.toFixed(2)}</td>
+                  <td className="py-2 pr-4 text-neutral-600">
+                    {new Date(s.created_at).toLocaleDateString('es-CO')}
+                  </td>
+                  <td className="py-2 pr-4 text-ink-700">
+                    {s.items.map(item => item.product_name).join(", ")}
+                  </td>
+                  <td className="py-2 pr-4 text-right font-semibold text-ink-800">{formatPrice(s.total)}</td>
                 </tr>
               ))}
             </tbody>

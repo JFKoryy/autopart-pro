@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import { formatPrice } from "../utils/formatters"
 import { ShoppingCart, Pencil, Trash2, AlertTriangle } from "lucide-react"
 
 /**
@@ -14,13 +15,13 @@ export default function ProductCard({
   canEdit = false,
   canDelete = false,
 }) {
-  const lowStock = product.stock <= product.minStock
+  const lowStock = product.stock <= product.min_stock
 
   return (
     <div className="flex flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white transition hover:shadow-md">
       <div className="relative aspect-[4/3] overflow-hidden bg-neutral-100">
         <img
-          src={product.image || "/placeholder.svg"}
+          src={product.image_url || "/placeholder.svg"}
           alt={product.name}
           className="h-full w-full object-cover"
         />
@@ -39,11 +40,10 @@ export default function ProductCard({
         <span className="text-xs font-mono text-neutral-400">{product.sku}</span>
         <h3 className="mt-0.5 font-semibold text-ink-800 leading-snug text-pretty">{product.name}</h3>
         <p className="mt-1 text-sm text-neutral-500">
-          {product.brand} · {product.model} · {product.year}
+          {product.brand} · {product.compatible_cars}
         </p>
-
         <div className="mt-3 flex items-end justify-between">
-          <span className="text-xl font-bold text-ink-900">${product.price.toFixed(2)}</span>
+          <span className="text-xl font-bold text-ink-900">{formatPrice(product.price)}</span>
           <span className={`text-sm font-medium ${lowStock ? "text-red-600" : "text-neutral-500"}`}>
             Stock: {product.stock}
           </span>

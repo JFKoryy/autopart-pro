@@ -24,14 +24,21 @@ export default function ProductForm() {
   const [form, setForm] = useState(empty)
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
+useEffect(() => {
     if (isEdit) {
-      // TODO: reemplazar por llamada real a la API
-      getProductById(id).then((p) => {
-        if (p) setForm({ ...empty, ...p })
-      })
+        getProductById(id)
+            .then((p) => {
+                if (p) {
+                    console.log('Producto cargado:', p)
+                    setForm({ ...empty, ...p })
+                }
+            })
+            .catch((error) => {
+                console.error('Error al cargar producto:', error)
+                alert('Error al cargar los datos del producto')
+            })
     }
-  }, [id, isEdit])
+}, [id, isEdit])
 
   function handleChange(e) {
     const { name, value } = e.target

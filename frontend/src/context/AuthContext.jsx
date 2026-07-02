@@ -1,5 +1,6 @@
-import { createContext, useContext, useState } from "react"
+
 import * as api from "../services/api"
+import { createContext, useContext, useState, useEffect } from "react"
 
 const AuthContext = createContext(null)
 
@@ -7,10 +8,20 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(false)
 
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      api.validateToken()
+        .then((user) => {
+          if (user) setUser(user)
+        })
+        .catch(() => localStorage.removeItem('token'))
+    }
+}, [])
+
 async function signIn(email, password) {
     setLoading(true)
     const res = await api.login(email, password)
-    console.log("Login response:", res) // Agregar un log para depuración
     setUser(res.user)
     localStorage.setItem("token", res.token) // Guardar el token en localStorage  
     setLoading(false)

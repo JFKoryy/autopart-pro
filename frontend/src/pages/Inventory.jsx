@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { getProducts, deleteProduct, updateProduct } from "../services/api"
 import { useAuth } from "../context/AuthContext"
+import { formatPrice } from "../utils/formatters"
 import Modal from "../components/Modal"
 import { Pencil, Trash2, PlusCircle, AlertTriangle, Save, Search } from "lucide-react"
 
@@ -107,7 +108,7 @@ async function saveStock() {
                     <td className="px-4 py-3 text-neutral-600">
                       {p.brand} {p.model} · {p.year}
                     </td>
-                    <td className="px-4 py-3 text-right font-semibold text-ink-800">${p.price.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-right font-semibold text-ink-800">{formatPrice(p.price)}</td>
                     <td className="px-4 py-3 text-center">
                       <button
                         onClick={() => can.updateStock && openStock(p)}

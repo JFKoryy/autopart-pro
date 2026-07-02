@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useParams, useNavigate, Link } from "react-router-dom"
 import { getProductById } from "../services/api"
 import { useCart } from "../context/CartContext"
+import { formatPrice } from "../utils/formatters"
 import { ShoppingCart, ChevronLeft, Loader2, Check } from "lucide-react"
 
 export default function ProductDetail() {
@@ -56,7 +57,7 @@ export default function ProductDetail() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div className="overflow-hidden rounded-xl border border-neutral-200 bg-white">
           <img
-            src={product.image || "/placeholder.svg"}
+            src={product.image_url || "/placeholder.svg"}
             alt={product.name}
             className="aspect-[4/3] w-full object-cover"
           />
@@ -67,7 +68,7 @@ export default function ProductDetail() {
           <h1 className="mt-1 text-2xl font-bold text-ink-800 text-balance">{product.name}</h1>
           <p className="mt-1 text-sm text-brand-600">{product.category}</p>
 
-          <p className="mt-4 text-3xl font-bold text-ink-900">${product.price.toFixed(2)}</p>
+          <p className="mt-4 text-3xl font-bold text-ink-900">{formatPrice(product.price)}</p>
           <p className={`mt-1 text-sm ${product.stock > 0 ? "text-green-600" : "text-red-600"}`}>
             {product.stock > 0 ? `${product.stock} unidades disponibles` : "Sin stock"}
           </p>

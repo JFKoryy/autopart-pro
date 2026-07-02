@@ -46,7 +46,24 @@ export async function register(name, email, password) {
   return data
 }
 
+  // ----------VALIDACIÓN DE TOKEN----------
 
+export async function validateToken() {
+  const token = localStorage.getItem('token')
+  if (!token) return null
+
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/me`, {
+    headers: getAuthHeader()
+  })
+
+  if (!response.ok) {
+    localStorage.removeItem('token')
+    return null
+  }
+
+  const data = await response.json()
+  return data.user
+}
   // ---------- PRODUCTOS ----------
 
   export async function getProducts() {
@@ -62,8 +79,10 @@ export async function register(name, email, password) {
   }
 
   export async function getProductById(id) {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/products/${id}`)
-
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/products/${id}`, {
+      headers: getAuthHeader()
+    })
+    
     const data = await response.json()
 
     if (!response.ok) {

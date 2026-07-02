@@ -10,7 +10,7 @@ export default function ShopLayout() {
       </main>
       <footer className="border-t border-neutral-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-6 text-sm text-neutral-500">
-          AutoPart Pro — Demo de interfaz. Datos de prueba, sin conexión a un backend real.
+          &copy; {new Date().getFullYear()} AutoPart Pro. Todos los derechos reservados.
         </div>
       </footer>
     </div>

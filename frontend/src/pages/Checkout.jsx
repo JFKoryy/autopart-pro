@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useCart } from "../context/CartContext"
+import { formatPrice } from "../utils/formatters"
 import { checkout } from "../services/api"
 import { CreditCard, Loader2, CheckCircle2, Lock } from "lucide-react"
 
@@ -101,7 +102,7 @@ export default function Checkout() {
             className="mt-6 flex w-full items-center justify-center gap-2 rounded-md bg-brand-500 px-4 py-3 font-semibold text-white hover:bg-brand-600 disabled:opacity-60 lg:hidden"
           >
             {loading && <Loader2 size={18} className="animate-spin" />}
-            Pagar ${grandTotal.toFixed(2)}
+            Pagar {formatPrice(grandTotal)}
           </button>
         </form>
 
@@ -114,21 +115,21 @@ export default function Checkout() {
                   <span className="text-neutral-600">
                     {item.name} <span className="text-neutral-400">x{item.qty}</span>
                   </span>
-                  <span className="font-medium text-ink-700">${(item.price * item.qty).toFixed(2)}</span>
+                  <span className="font-medium text-ink-700">{formatPrice(item.price * item.qty)}</span>
                 </li>
               ))}
             </ul>
             <div className="flex justify-between text-sm text-neutral-600">
               <span>Subtotal</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{formatPrice(total)}</span>
             </div>
             <div className="mt-1 flex justify-between text-sm text-neutral-600">
               <span>Envío</span>
-              <span>${shipping.toFixed(2)}</span>
+              <span>{formatPrice(shipping)}</span>
             </div>
             <div className="mt-4 flex justify-between border-t border-neutral-200 pt-4 text-lg font-bold text-ink-900">
               <span>Total</span>
-              <span>${grandTotal.toFixed(2)}</span>
+              <span>{formatPrice(grandTotal)}</span>
             </div>
             <button
               type="submit"
@@ -138,7 +139,7 @@ export default function Checkout() {
               className="mt-5 hidden w-full items-center justify-center gap-2 rounded-md bg-brand-500 px-4 py-2.5 font-semibold text-white hover:bg-brand-600 disabled:opacity-60 lg:flex"
             >
               {loading && <Loader2 size={18} className="animate-spin" />}
-              Pagar ${grandTotal.toFixed(2)}
+              Pagar {formatPrice(grandTotal)}
             </button>
           </div>
         </div>

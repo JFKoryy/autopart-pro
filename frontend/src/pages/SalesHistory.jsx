@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react"
 import { getSales } from "../services/api"
 import { useAuth } from "../context/AuthContext"
+import { formatPrice } from "../utils/formatters"
 import { Receipt } from "lucide-react"
 
 export default function SalesHistory() {
   const { role, can } = useAuth()
   const [sales, setSales] = useState([])
 
-  useEffect(() => {
-    // TODO: reemplazar por llamada real a la API
-    getSales().then(setSales)
-  }, [])
+useEffect(() => {
+    getSales()
+        .then(setSales)
+        .catch((error) => console.error("Error al obtener ventas:", error))
+}, [])
 
   // Admin ve todo el historial; empleado/cliente solo sus propias ventas/compras.
   const visibleSales = can.viewAllSales ? sales : sales.filter((s) => s.customer === "client")
@@ -38,7 +40,7 @@ export default function SalesHistory() {
         </span>
         <div>
           <p className="text-xs text-neutral-500">Total acumulado</p>
-          <p className="font-bold text-ink-900">${total.toFixed(2)}</p>
+          <p className="font-bold text-ink-900">{formatPrice(total)}</p>
         </div>
       </div>
 
@@ -65,10 +67,16 @@ export default function SalesHistory() {
                 visibleSales.map((s) => (
                   <tr key={s.id} className="border-t border-neutral-100">
                     <td className="px-4 py-3 font-mono text-neutral-500">{s.id}</td>
-                    <td className="px-4 py-3 text-neutral-600">{s.date}</td>
-                    <td className="px-4 py-3 text-ink-700">{s.product}</td>
-                    <td className="px-4 py-3 text-center text-ink-700">{s.quantity}</td>
-                    <td className="px-4 py-3 text-right font-semibold text-ink-800">${s.total.toFixed(2)}</td>
+                    <td className="px-4 py-3 text-neutral-600">
+                      {new Date(s.created_at).toLocaleDateString('es-CO')}
+                    </td>
+                    <td className="px-4 py-3 text-ink-700">
+                      {s.items.map(item => `${item.product_name} (${item.quantity})`).join(", ")}
+                    </td>
+                    <td className="px-4 py-3 text-center text-ink-700">
+                      {s.items.reduce((sum, item) => sum + item.quantity, 0)}
+                    </td>
+                    <td className="px-4 py-3 text-right font-semibold text-ink-800">{formatPrice(s.total)}</td>
                   </tr>
                 ))
               )}

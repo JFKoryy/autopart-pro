@@ -13,6 +13,14 @@ export function CartProvider({ children }) {
       }
       return [...prev, { ...product, qty }]
     })
+    useEffect(() => {
+  localStorage.setItem('cart', JSON.stringify(items))
+}, [items])
+
+useEffect(() => {
+  const saved = localStorage.getItem('cart')
+  if (saved) setItems(JSON.parse(saved))
+}, [])
   }
 
   function updateQty(id, qty) {

@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useCart } from "../context/CartContext"
+import { formatPrice } from "../utils/formatters"
 import { Trash2, ShoppingCart, ChevronLeft } from "lucide-react"
 
 export default function Cart() {
@@ -34,14 +35,14 @@ export default function Cart() {
             {items.map((item) => (
               <div key={item.id} className="flex items-center gap-4 border-b border-neutral-100 p-4 last:border-0">
                 <img
-                  src={item.image || "/placeholder.svg"}
+                  src={item.image_url || "/placeholder.svg"}
                   alt={item.name}
                   className="h-20 w-20 shrink-0 rounded-md object-cover"
                 />
                 <div className="min-w-0 flex-1">
                   <p className="font-medium text-ink-800 truncate">{item.name}</p>
                   <p className="text-sm text-neutral-400">{item.sku}</p>
-                  <p className="text-sm font-semibold text-ink-700">${item.price.toFixed(2)}</p>
+                  <p className="text-sm font-semibold text-ink-700">{formatPrice(item.price)}</p>
                 </div>
                 <div className="flex items-center rounded-md border border-neutral-300">
                   <button
@@ -59,7 +60,7 @@ export default function Cart() {
                   </button>
                 </div>
                 <span className="w-20 text-right font-semibold text-ink-800">
-                  ${(item.price * item.qty).toFixed(2)}
+                  {formatPrice(item.price * item.qty)}
                 </span>
                 <button
                   onClick={() => removeItem(item.id)}
@@ -78,7 +79,7 @@ export default function Cart() {
             <h2 className="mb-4 font-semibold text-ink-800">Resumen</h2>
             <div className="flex justify-between text-sm text-neutral-600">
               <span>Subtotal</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{formatPrice(total)}</span>
             </div>
             <div className="mt-1 flex justify-between text-sm text-neutral-600">
               <span>Envío</span>
@@ -86,7 +87,7 @@ export default function Cart() {
             </div>
             <div className="mt-4 flex justify-between border-t border-neutral-200 pt-4 text-lg font-bold text-ink-900">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{formatPrice(total)}</span>
             </div>
             <button
               onClick={() => navigate("/checkout")}

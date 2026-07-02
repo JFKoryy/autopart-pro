@@ -24,16 +24,18 @@ export default function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 text-white">
-            <Wrench size={20} />
-          </span>
-          <div className="leading-tight">
-            <span className="block font-bold text-ink-800">AutoPart Pro</span>
-            <span className="block text-xs text-neutral-500">Repuestos automotrices</span>
-          </div>
-        </Link>
-
+      <button 
+        onClick={() => navigate(isInternal ? "/admin" : "/catalogo")}
+        className="flex items-center gap-2 hover:opacity-80 transition"
+      >
+        <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500 text-white">
+          <Wrench size={20} />
+        </span>
+        <div className="leading-tight">
+          <span className="block font-bold text-ink-800">AutoPart Pro</span>
+          <span className="block text-xs text-neutral-500">Repuestos automotrices</span>
+        </div>
+      </button>
         <nav className="flex items-center gap-1 sm:gap-2">
           <Link
             to="/catalogo"
