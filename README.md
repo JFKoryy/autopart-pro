@@ -64,23 +64,22 @@ Crea un archivo .env en /frontend con:
 
 VITE_API_URL=http://localhost:5000/api
 
-Estructura del proyecto
+### Estructura del proyecto
 
-autopart-pro/
-├── backend/
-│   └── src/
-│       ├── config/       → conexión a MySQL
-│       ├── models/       → queries SQL
-│       ├── controllers/  → lógica de negocio
-│       ├── middleware/   → auth, roles, validación
-│       ├── routes/       → endpoints de la API
-│       └── events/       → EventEmitter para stock bajo
-└── frontend/
-    └── src/
-        ├── components/   → componentes reutilizables
-        ├── pages/        → vistas por módulo
-        ├── services/     → llamadas a la API
-        └── context/      → AuthContext, CartContext
+**Backend** `/backend/src/`
+- `config/` → conexión a MySQL
+- `models/` → queries SQL
+- `controllers/` → lógica de negocio
+- `middleware/` → auth, roles, validación
+- `routes/` → endpoints de la API
+- `events/` → EventEmitter para stock bajo
+
+**Frontend** `/frontend/src/`
+- `components/` → componentes reutilizables
+- `pages/` → vistas por módulo
+- `services/` → llamadas a la API
+- `context/` → AuthContext, CartContext
+
 
 Pendiente (roadmap)
 
@@ -153,23 +152,21 @@ Create a .env file in /frontend:
 
 VITE_API_URL=http://localhost:5000/api
 
-Project Structure
+### Project Structure
 
-autopart-pro/
-├── backend/
-│   └── src/
-│       ├── config/       → MySQL connection
-│       ├── models/       → SQL queries
-│       ├── controllers/  → business logic
-│       ├── middleware/   → auth, roles, validation
-│       ├── routes/       → API endpoints
-│       └── events/       → EventEmitter for low stock
-└── frontend/
-    └── src/
-        ├── components/   → reusable components
-        ├── pages/        → module views
-        ├── services/     → API calls
-        └── context/      → AuthContext, CartContext
+**Backend** `/backend/src/`
+- `config/` → MySQL connection
+- `models/` → SQL queries
+- `controllers/` → business logic
+- `middleware/` → auth, roles, validation
+- `routes/` → API endpoints
+- `events/` → EventEmitter for low stock
+
+**Frontend** `/frontend/src/`
+- `components/` → reusable components
+- `pages/` → module views
+- `services/` → API calls
+- `context/` → AuthContext, CartContext
 
 Roadmap
 
