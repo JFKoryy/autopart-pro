@@ -34,7 +34,7 @@ Instalación local
 Requisitos: Node.js 18+, MySQL 8+
 
 bash# Clonar el repositorio
-git clone https://github.com/tu-usuario/autopart-pro.git
+git clone https://github.com/JFKoryy/autopart-pro.git
 cd autopart-pro
 
 # Backend
@@ -123,7 +123,7 @@ Local Setup
 Requirements: Node.js 18+, MySQL 8+
 
 bash# Clone the repository
-git clone https://github.com/your-username/autopart-pro.git
+git clone https://github.com/JFKoryy/autopart-pro.git
 cd autopart-pro
 
 # Backend
