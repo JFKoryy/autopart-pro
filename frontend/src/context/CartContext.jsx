@@ -1,9 +1,19 @@
 import { createContext, useContext, useState } from "react"
+import { useEffect } from "react"
 
 const CartContext = createContext(null)
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([])
+
+  const [items, setItems] = useState(() => {
+  const saved = localStorage.getItem('cart')
+  return saved ? JSON.parse(saved) : []
+})
+  
+    useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(items))
+    }, [items])
+
 
   function addItem(product, qty = 1) {
     setItems((prev) => {
@@ -13,16 +23,7 @@ export function CartProvider({ children }) {
       }
       return [...prev, { ...product, qty }]
     })
-    useEffect(() => {
-  localStorage.setItem('cart', JSON.stringify(items))
-}, [items])
-
-useEffect(() => {
-  const saved = localStorage.getItem('cart')
-  if (saved) setItems(JSON.parse(saved))
-}, [])
   }
-
   function updateQty(id, qty) {
     setItems((prev) => prev.map((i) => (i.id === id ? { ...i, qty: Math.max(1, qty) } : i)))
   }
