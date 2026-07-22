@@ -14,7 +14,8 @@ const userRoutes = require('./routes/userRoutes');
 app.use(cors({
     origin: [
         'http://localhost:5173',
-        'http://192.168.1.165:5173'
+        'http://192.168.1.165:5173',
+        'https://d16nmnf4puiydq.cloudfront.net'
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
