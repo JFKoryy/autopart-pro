@@ -1,4 +1,4 @@
-name: Deploy AutoPart Pro
+name: Deploy AutoPart Pro Backend
 
 on:
   push:
@@ -8,10 +8,23 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install backend dependencies
+        run: cd backend && npm install
+      
+      - name: Create deployment package
+        run: |
+          cd backend
+          zip -r ../backend.zip . -x "node_modules/*" ".env"
       
       - name: Deploy to Elastic Beanstalk
-        uses: einaregilsson/beanstalk-deploy@v21
+        uses: einaregilsson/beanstalk-deploy@v22
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
