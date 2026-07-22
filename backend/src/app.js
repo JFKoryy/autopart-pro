@@ -21,6 +21,14 @@ app.use(cors({
 }));
 app.use(express.json());
 
+app.get('/', (req, res) => {
+    res.status(200).json({ 
+        message: 'AutoPart Pro Backend',
+        status: 'online',
+        timestamp: new Date()
+    });
+});
+
 // EventEmitter — stock bajo
 stockEmitter.on('low-stock', (product) => {
     console.log(`⚠️ Alerta de stock bajo: "${product.name}" (SKU: ${product.sku}) tiene stock de ${product.stock}.`);
