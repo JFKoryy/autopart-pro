@@ -149,6 +149,51 @@ export async function validateToken() {
     return data.data
   }
 
+export async function uploadImage(file) {
+  const formData = new FormData()
+  formData.append('image', file)
+
+  const { Authorization } = getAuthHeader() // toma solo el token, descarta el Content-Type
+
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
+    method: 'POST',
+    headers: { Authorization }, // sin Content-Type — el navegador lo arma solo con el boundary correcto
+    body: formData
+  })
+
+  let data
+  try {
+    data = await response.json()
+  } catch {
+    throw new Error('Error al subir la imagen. Verifica el tamaño del archivo.')
+  }
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Error al subir la imagen')
+  }
+
+  return data.url
+}
+
+export async function deleteImage(url) {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeader()
+    },
+    body: JSON.stringify({ url })
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Error al eliminar la imagen')
+  }
+
+  return data
+}
+
 // ---------- VENTAS ----------
 
 export async function getSales() {

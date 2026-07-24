@@ -60,5 +60,7 @@ CREATE TABLE sale_items (
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
+ALTER TABLE products ADD COLUMN active BOOLEAN DEFAULT TRUE;
+
 
 INSERT INTO test_connection (status_message) VALUES ('¡Conexión de la Fase 1 exitosa desde la DB!');

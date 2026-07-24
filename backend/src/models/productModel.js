@@ -3,7 +3,7 @@ const db = require('../config/db');
 const ProductModel = {
     // 1. Obtener todos los productos del inventario
     getAll: async () => {
-        const [rows] = await db.execute('SELECT * FROM products ORDER BY created_at DESC');
+        const [rows] = await db.execute('SELECT * FROM products WHERE active = TRUE ORDER BY created_at DESC');
         return rows.map(row => ({ ...row, price: parseFloat(row.price) }));
     },
 
@@ -81,10 +81,9 @@ update: async (id, productData) => {
 
     // 5. Eliminar una autoparte
     delete: async (id) => {
-        const [result] = await db.execute('DELETE FROM products WHERE id = ?', [id]);
-        return result.affectedRows > 0; // Devuelve true si el producto existía y fue borrado
-    },
-
+    const [result] = await db.execute('UPDATE products SET active = FALSE WHERE id = ?', [id]);
+    return result.affectedRows > 0;
+},
     // 6. Obtener productos con stock bajo
     getLowStock: async () => {
     const [rows] = await db.execute('SELECT name, stock FROM products WHERE stock <= min_stock');

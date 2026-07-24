@@ -10,6 +10,7 @@ const authRoutes = require('./routes/authRoutes');
 const productRoutes = require('./routes/productRoutes');
 const saleRoutes = require('./routes/saleRoutes');
 const userRoutes = require('./routes/userRoutes');
+const uploadRoutes = require('./routes/uploadRoutes');
 
 app.use(cors({
     origin: [
@@ -21,7 +22,10 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
+app.use('/api/upload', uploadRoutes);
+app.use('/uploads', express.static('uploads'));
+
 
 app.get('/', (req, res) => {
     res.status(200).json({ 

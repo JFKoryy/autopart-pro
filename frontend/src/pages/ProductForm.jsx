@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
-import { getProductById, createProduct, updateProduct } from "../services/api"
+import { getProductById, createProduct, updateProduct, deleteImage } from "../services/api"
 import { brands, years } from "../services/mockData"
 import { ChevronLeft, Save, Loader2 } from "lucide-react"
+import ImageUpload from "../components/ImageUpload"
 
 const empty = {
   sku: "",
@@ -48,7 +49,6 @@ useEffect(() => {
   async function handleSubmit(e) {
     e.preventDefault()
     setLoading(true)
-    // TODO: reemplazar por llamada real a la API
     if (isEdit) await updateProduct(id, form)
     else await createProduct(form)
     setLoading(false)
@@ -104,26 +104,27 @@ useEffect(() => {
               className="w-full rounded-md border border-neutral-300 px-3 py-2 text-ink-800 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200"
             />
           </div>
-
-                <div className="sm:col-span-2">
-          <Field
-            label="URL de la imagen"
-            name="image_url"
+          <div className="sm:col-span-2">
+            <ImageUpload
             value={form.image_url}
-            onChange={handleChange}
-            placeholder="https://..."
-          />
+            onChange={(url) => setForm((prev) => ({ ...prev, image_url: url }))}
+            />
           </div>
         </div>
 
         <div className="mt-6 flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={() => navigate("/admin/inventario")}
-            className="rounded-md border border-neutral-200 px-4 py-2 font-medium text-ink-700 hover:bg-neutral-100"
-          >
-            Cancelar
-          </button>
+        <button
+          type="button"
+          onClick={async () => {
+            if (form.image_url && !isEdit) {
+              await deleteImage(form.image_url).catch(() => {})
+            }
+            navigate("/admin/inventario")
+          }}
+          className="rounded-md border border-neutral-200 px-4 py-2 font-medium text-ink-700 hover:bg-neutral-100"
+        >
+          Cancelar
+        </button>
           <button
             type="submit"
             disabled={loading}
