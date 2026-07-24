@@ -11,6 +11,15 @@ const UserModel = {
         const [result] = await db.execute(query, [name, email, hashedPassword]);
         return result;
     },
+        createWithRole: async (name, email, hashedPassword, role) => {
+        const query = `
+            INSERT INTO users (name, email, password, role) 
+            VALUES (?, ?, ?, ?)
+        `;
+        const [result] = await db.execute(query, [name, email, hashedPassword, role]);
+        return result;
+    },
+
 
     getAll: async () => {
         const [rows] = await db.execute('SELECT id, name, email, role FROM users');
@@ -34,13 +43,13 @@ const UserModel = {
         const [result] = await db.execute(query, [id]);
         return result;
     },
-    updateRole: async (id, role) => {
-    const [result] = await db.execute(
-        'UPDATE users SET role = ? WHERE id = ?',
-        [role, id]
-    );
-    return result.affectedRows > 0;
-}
+    updateUser: async (id, { name, email, role }) => {
+        const [result] = await db.execute(
+            'UPDATE users SET name = ?, email = ?, role = ? WHERE id = ?',
+            [name, email, role, id]
+        );
+        return result.affectedRows > 0;
+    },
 };
 
 module.exports = UserModel;

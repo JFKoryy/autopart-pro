@@ -180,22 +180,24 @@ export async function getUsers() {
   return data.data
 }
 
-export async function updateUserRole(id, role) {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${id}/role`, {
+export async function updateUser(id, { name, email, role }) {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${id}`, {
     method: 'PUT',
-    headers: getAuthHeader(),
-    body: JSON.stringify({ role })
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeader()
+    },
+    body: JSON.stringify({ name, email, role })
   })
 
   const data = await response.json()
 
   if (!response.ok) {
-    throw new Error(data.message || 'Error al actualizar rol')
+    throw new Error(data.message || 'Error al actualizar usuario')
   }
 
   return data
 }
-
 export async function deleteUser(id) {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/users/${id}`, {
     method: 'DELETE',
@@ -210,6 +212,25 @@ export async function deleteUser(id) {
 
   return data
 }
+
+export async function createUser(userData) {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/users`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeader()
+    },
+    body: JSON.stringify(userData)
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Error al crear usuario')
+  }
+
+  return data.data
+} 
 
 // ---------- CHECKOUT ----------
 

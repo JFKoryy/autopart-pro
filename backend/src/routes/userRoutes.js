@@ -6,7 +6,8 @@ const { authorize } = require('../middleware/roleMiddleware');
 
 // Todas las rutas de usuarios son solo para admin
 router.get('/', protect, authorize('admin'), userController.getUsers);
-router.put('/:id/role', protect, authorize('admin'), userController.updateRole);
+router.post('/', protect, authorize('admin'), userController.createUser);
+router.put('/:id', protect, authorize('admin'), userController.updateUser);
 router.delete('/:id', protect, authorize('admin'), userController.deleteUser);
 
 module.exports = router;
