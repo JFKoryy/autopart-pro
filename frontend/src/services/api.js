@@ -150,14 +150,48 @@ export async function validateToken() {
   }
 
 export async function uploadImage(file) {
+  const { Authorization } = getAuthHeader()
+
+  // Paso 1: preguntar al backend qué modo usar
+  const initRes = await fetch(`${import.meta.env.VITE_API_URL}/upload/init`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization },
+    body: JSON.stringify({ filename: file.name, contentType: file.type })
+  })
+
+  let initData
+  try {
+    initData = await initRes.json()
+  } catch {
+    throw new Error('Error al iniciar la subida de imagen.')
+  }
+
+  if (!initRes.ok) {
+    throw new Error(initData.message || 'Error al iniciar la subida')
+  }
+
+  // Modo S3: subir directo al bucket con la URL prefirmada
+  if (initData.mode === 's3') {
+    const uploadRes = await fetch(initData.uploadUrl, {
+      method: 'PUT',
+      headers: { 'Content-Type': file.type },
+      body: file
+    })
+
+    if (!uploadRes.ok) {
+      throw new Error('Error al subir la imagen a S3.')
+    }
+
+    return initData.publicUrl
+  }
+
+  // Modo local: flujo antiguo con FormData
   const formData = new FormData()
   formData.append('image', file)
 
-  const { Authorization } = getAuthHeader() // toma solo el token, descarta el Content-Type
-
   const response = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
     method: 'POST',
-    headers: { Authorization }, // sin Content-Type — el navegador lo arma solo con el boundary correcto
+    headers: { Authorization },
     body: formData
   })
 
@@ -174,7 +208,6 @@ export async function uploadImage(file) {
 
   return data.url
 }
-
 export async function deleteImage(url) {
   const response = await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
     method: 'DELETE',
