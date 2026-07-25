@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext"
 import { formatPrice } from "../utils/formatters"
 import { checkout } from "../services/api"
 import { CreditCard, Loader2, CheckCircle2, Lock } from "lucide-react"
+import { createCheckoutSession } from "../services/api"
 
 export default function Checkout() {
   const { items, total, clearCart } = useCart()
@@ -15,18 +16,15 @@ export default function Checkout() {
   const shipping = items.length > 0 ? 10000 : 0
   const grandTotal = total + shipping
 
- async function handleSubmit(e) {
+async function handleSubmit(e) {
     e.preventDefault()
     setLoading(true)
     try {
-        const res = await checkout(items)
-        setOrderId(res.saleId)
-        clearCart()
-        setDone(true)
+        const url = await createCheckoutSession(items)
+        window.location.href = url // redirige al Checkout hospedado por Stripe
     } catch (error) {
         console.error('Error en checkout:', error)
         alert(error.message)
-    } finally {
         setLoading(false)
     }
 }

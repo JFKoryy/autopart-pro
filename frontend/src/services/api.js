@@ -242,6 +242,30 @@ export async function getSales() {
 
   return data.data
 }
+
+export async function createCheckoutSession(items) {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/payments/create-checkout-session`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeader()
+    },
+    body: JSON.stringify({ items })
+  })
+
+  let data
+  try {
+    data = await response.json()
+  } catch {
+    throw new Error('Error al iniciar el pago.')
+  }
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Error al iniciar el pago')
+  }
+
+  return data.url
+}
 // ---------- USUARIOS ----------
 
 export async function getUsers() {

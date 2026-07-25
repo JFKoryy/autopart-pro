@@ -11,6 +11,8 @@ const productRoutes = require('./routes/productRoutes');
 const saleRoutes = require('./routes/saleRoutes');
 const userRoutes = require('./routes/userRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
+const paymentController = require('./controllers/paymentController');
 
 app.use(cors({
     origin: [
@@ -22,10 +24,15 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Webhook de Stripe: necesita el body sin parsear (raw), por eso va antes de express.json()
+app.post('/api/payments/webhook', express.raw({ type: 'application/json' }), paymentController.handleWebhook);
+
 app.use(express.json({ limit: '10mb' }));
+
 app.use('/api/upload', uploadRoutes);
 app.use('/uploads', express.static('uploads'));
-
+app.use('/api/payments', paymentRoutes);
 
 app.get('/', (req, res) => {
     res.status(200).json({ 
@@ -54,6 +61,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/sales', saleRoutes);
 app.use('/api/users', userRoutes);
+
 // Servidor
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

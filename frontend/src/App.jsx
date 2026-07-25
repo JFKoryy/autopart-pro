@@ -16,6 +16,8 @@ import Inventory from "./pages/Inventory"
 import ProductForm from "./pages/ProductForm"
 import SalesHistory from "./pages/SalesHistory"
 import Users from "./pages/Users"
+import CheckoutSuccess from "./pages/CheckoutSuccess"
+import CheckoutCancel from "./pages/CheckoutCancel"
 
 export default function App() {
   return (
@@ -33,6 +35,8 @@ export default function App() {
             <Route path="/producto/:id" element={<ProductDetail />} />
             <Route path="/carrito" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
+            <Route path="/checkout/success" element={<CheckoutSuccess />} />
+            <Route path="/checkout/cancel" element={<CheckoutCancel />} />
           </Route>
 
           {/* Internas (admin / empleado) */}
@@ -71,6 +75,7 @@ export default function App() {
                   <Users />
                 </ProtectedRoute>
               }
+              
             />
           </Route>
 

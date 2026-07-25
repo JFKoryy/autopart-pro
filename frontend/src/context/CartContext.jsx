@@ -14,7 +14,7 @@ export function CartProvider({ children }) {
     localStorage.setItem('cart', JSON.stringify(items))
     }, [items])
 
-
+    
   function addItem(product, qty = 1) {
     setItems((prev) => {
       const existing = prev.find((i) => i.id === product.id)
