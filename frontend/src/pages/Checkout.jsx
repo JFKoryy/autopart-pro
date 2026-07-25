@@ -76,6 +76,7 @@ async function handleSubmit(e) {
           </div>
 
           {/* Placeholder visual de la pasarela de pago */}
+{/* Método de pago */}
           <div className="mt-6 rounded-xl border border-neutral-200 bg-white p-5">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-semibold text-ink-800">Método de pago</h2>
@@ -84,13 +85,14 @@ async function handleSubmit(e) {
               </span>
             </div>
 
-            <div className="rounded-lg border-2 border-dashed border-neutral-300 bg-neutral-50 p-6 text-center">
-              <CreditCard size={32} className="mx-auto text-neutral-400" />
-              <p className="mt-2 font-medium text-ink-700">Pasarela de pago (placeholder)</p>
-              <p className="text-sm text-neutral-500">
-                {/* TODO: integrar la pasarela de pago real (Stripe, Culqi, etc.) */}
-                Aquí se integrará la pasarela de pago. Por ahora es solo un marcador visual.
-              </p>
+            <div className="flex items-center gap-4 rounded-lg border border-neutral-200 bg-neutral-50 p-6">
+              <CreditCard size={32} className="text-brand-500" />
+              <div>
+                <p className="font-medium text-ink-700">Pago con tarjeta vía Stripe</p>
+                <p className="text-sm text-neutral-500">
+                  Serás redirigido a una página segura de Stripe para completar tu pago.
+                </p>
+              </div>
             </div>
           </div>
 
