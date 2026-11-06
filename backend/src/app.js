@@ -15,12 +15,13 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const paymentController = require('./controllers/paymentController');
 
 app.use(cors({
-    origin: [
+    origin: [...new Set([
+        process.env.FRONTEND_URL || 'http://localhost:5173',
         'http://localhost:5173',
         'http://192.168.1.165:5173',
         'https://d16nmnf4puiydq.cloudfront.net',
         'http://192.168.18.106:5173'
-    ],
+    ])],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
